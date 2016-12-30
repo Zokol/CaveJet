@@ -47,25 +47,32 @@ class Player:
 
 class Game:
 	def __init__(self):
+		self.distance = 0
+		
 		self.field = Field(screen_size)
 		self.ai = AI(self.field)
-		self.speed = 0.1
+		self.speed = 0.05
 		self.run = True
+
+		scrollphat.set_brightness(1)
 
 		while self.run:
 			self.step()
 			#self.print_field()
 			self.print_phat()
+			print(self.distance)
 			time.sleep(self.speed)
 
 	def step(self):
+		self.distance += 1
 		self.field.update()
-		self.ai.next_move()
+		#self.ai.next_move()
+		self.ai.better_move(50)
 		if self.field.buffer[self.ai.player.x][self.ai.player.y] == 1:
 			self.game_over()
 
 	def game_over(self):
-		for i in range(5):
+		for i in range(1):
 			self.set_checker(0)
 			time.sleep(0.5)
 			self.set_checker(1)
@@ -84,7 +91,7 @@ class Game:
 	def print_phat(self):
 		scrollphat.clear()
 
-		print(self.ai.player.x, self.ai.player.y)
+		#print(self.ai.player.x, self.ai.player.y)
 		for x, col in enumerate(self.field.buffer):
 			for y, pixel in enumerate(col):
 				scrollphat.set_pixel(x,y,pixel)
@@ -102,6 +109,7 @@ class AI:
 
 	def next_move(self):
 		next_col = self.field.buffer[self.player.x + 1]
+		#next2_col = self.field.buffer[self.player.x + 2]
 		print(next_col, next_col[self.player.y])
 		if next_col[self.player.y] == 1:
 			if self.player.y < 4:
@@ -112,6 +120,60 @@ class AI:
 				if next_col[self.player.y - 1] == 0:
 					self.player.y -= 1
 					return 0
+		"""
+		elif next2_col[self.player.y] == 1:
+			if self.player.y < 3:
+				if next2_col[self.player.y + 2] == 0:
+					self.player.y += 1
+					return 0
+			if self.player.y > 1:
+				if next2_col[self.player.y - 2] == 0:
+					self.player.y -= 1
+					return 0
+		"""
+
+	def better_move(self, iterations):
+		move_weight = {-1: -1, 0: 0, 1: -1}
+		next_layer_weight = 1
+		best = {"score": 0, "moves": []}
+		for iteration in range(iterations):
+			player_coords = {'x': self.player.x, 'y': self.player.y}
+			moves = []
+			for layer in self.field.buffer[player_coords['x']:]:
+				if layer[player_coords['y']] == 1:
+					break
+				possible_moves = [-1, 0, 1]
+				if player_coords['y'] == 4:
+					try: possible_moves.remove(1)
+					except ValueError: pass
+					if layer[player_coords['y'] - 1] == 1:
+						try: possible_moves.remove(-1)
+						except ValueError: pass
+				elif 1 <= player_coords['y'] <= 3:
+					if layer[player_coords['y'] - 1] == 1:
+						try: possible_moves.remove(-1)
+						except ValueError: pass
+					if layer[player_coords['y'] + 1] == 1:
+						try: possible_moves.remove(1)
+						except ValueError: pass
+				elif player_coords['y'] == 0:
+					try: possible_moves.remove(-1)
+					except ValueError: pass
+					if layer[player_coords['y'] + 1] == 1:
+						try: possible_moves.remove(1)
+						except ValueError: pass
+				move = random.choice(possible_moves)
+					
+				player_coords['y'] += move
+				moves.append(move)
+				player_coords['x'] += 1
+			score = 0
+			for move in moves:
+				score += move_weight[move] + next_layer_weight
+			if best["score"] < score: 
+				best["score"] = score
+				best["moves"] = moves
+		self.player.y += best["moves"][0]
 
 if __name__ == "__main__":
 	while True:
