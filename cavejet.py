@@ -89,7 +89,7 @@ class Game:
 	def step(self):
 		self.distance += 1
 		self.field.update()
-		self.ai.better_move(50) # Number determines the number of iterations done every move, affected by CPU-power
+		self.ai.move()
 		if self.field.buffer[self.ai.player.x][self.ai.player.y] == 1:
 			if SCREEN_TYPE == "UNICORN": self.game_over_unicorn()
 			if SCREEN_TYPE == "SCROLL": self.game_over_scroll()
@@ -197,22 +197,29 @@ class AI:
 		return score
 
 	"""
+	Move player
+
+	Uses some available AI-algo to figure out the next move
+	"""
+	def move(self):
+		#self.player.y += self.next_move()[0]
+		self.player.y += self.better_move(50)[0]
+		#self.player.y += self.even_better_move(3, [])[0]
+
+	"""
 	Myopic AI
 
 	This algorithm is very very near-sighted, and it's flying in fog, and it's raining... wait, can that happen? *wanders off to r/askreddit/*
 	"""
 	def next_move(self):
 		next_col = self.field.buffer[self.player.x + 1]
-		print(next_col, next_col[self.player.y])
 		if next_col[self.player.y] == 1:
 			if self.player.y < 4:
 				if next_col[self.player.y + 1] == 0:
-					self.player.y += 1
-					return 0
+					return [1]
 			if self.player.y > 0:
 				if next_col[self.player.y - 1] == 0:
-					self.player.y -= 1
-					return 0
+					return [-1]
 
 	"""
 	Random path finding AI
@@ -245,12 +252,8 @@ class AI:
 			if best["score"] < score: 
 				best["score"] = score
 				best["moves"] = moves
-		try:
-			self.player.y += best["moves"][0] # Found some good moves!
-		except IndexError:
-			pass
-		#else:
-		#	self.player.y += 0 # Oh no! There seems to be nothing I can do, so best to head straight and hope that the wall is thin..
+		
+		return best["moves"]
 
 	"""
 	Recursive AI
@@ -280,7 +283,7 @@ class AI:
 		else:
 			for layer in self.field.buffer[player_coords['x']:]:
 				possible_moves = filter_moves(layer)
-				
+
 				paths = []
 				for move in possible_moves:
 					paths.append(self.even_better_move(depth_limit, moves + [move]))
