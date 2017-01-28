@@ -228,6 +228,32 @@ class AI:
 		else:
 			self.player.y += 0 # Oh no! There seems to be nothing I can do, so best to head straight and hope that the wall is thin..
 
+	"""
+	Recursive AI
+
+	Now this starts to be something you can call efficient. (If you disagree, take a look at the other two)
+
+	Idea is simple: 
+		1) We take a path that has no intersections and continue until we have to make a choise or until player hit's a wall
+		2) Start new instances of this function for each choise and wait for them to return their moves.
+		3) Calculate scores for the routes we received.
+		4) Move player according to the best move we know.
+
+	It is quite clear that if we calculate this after every step player takes, and the field is giving us lots of room to move, 
+	this recursive tactic spirals out of control prettu fast. It's dependent on how much memory and CPU-power we have, but there
+	should be some way of controlling this recursion.
+	Thus, the only parameter given to the algorithm is very very very important. It behaves like TTL-value in network packets.
+	The depth_limit is reduced by one each time it is passed onwards and checked if it reaches zero. If it does, the recursion ends
+	and the result is passed to the parent-function.
+
+	By increasing the depth-limit, more possible routes will be evaluated and also slower the code execution will be.
+
+	"""
+	def even_better_move(self, depth_limit, moves = []):
+		depth_limit -= 1
+		if depth_limit == 0:
+			return 0
+
 if __name__ == "__main__":
 	while True:
 		game = Game()
