@@ -100,6 +100,7 @@ class Game:
 			for y in range(height):
 				r, g, b = [200,0,0]
 				unicorn.set_pixel(x, y, r, g, b)
+		self.run = False
 
 	def game_over_scroll(self):
 		for i in range(1):
