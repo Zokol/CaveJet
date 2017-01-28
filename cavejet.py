@@ -1,8 +1,30 @@
-import scrollphat
 import random
 import time
 
-screen_size = (5, 11)
+SCREEN_TYPE = "UNICORN"
+#SCREEN_TYPE = "SCROLL"
+RGB_ENABLED = True
+
+if SCREEN_TYPE == "UNICORN":
+	import unicornhat as unicorn
+	unicorn.set_layout(unicorn.AUTO)
+	unicorn.rotation(0)
+	unicorn.brightness(0.2)
+	SCREEN_WIDTH, SCREEN_HEIGHT = unicorn.get_shape()
+	screen_size = (SCREEN_WIDTH, SCREEN_HEIGHT)
+	RGB_ENABLED = True
+
+	BG_COLOR = [0, 0, 0]
+	CAVE_COLOR = [255, 255, 255]
+	PLAYER_COLOR = [255, 0, 0]
+
+if SCREEN_TYPE == "SCROLL":
+	import scrollphat
+	SCREEN_WIDTH = 11
+	SCREEN_HEIGHT = 5
+	scrollphat.set_brightness(1)
+
+screen_size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
 class Field:
 	def __init__(self, field_size):
@@ -23,7 +45,7 @@ class Field:
 			diff_place = random.randint(-1,1)
 		diff_width = random.randint(-1,1)
 		if diff_width + self.gap_buffer[-1][1] <= 1: diff_width = 1 
-		if diff_width + self.gap_buffer[-1][1] > 5: diff_width = -1 
+		if diff_width + self.gap_buffer[-1][1] > screen_size[0]: diff_width = -1 
 
 		self.gap_buffer.append((self.gap_buffer[-1][0] + diff_place, self.gap_buffer[-1][1] + diff_width))
 		if len(self.gap_buffer) > 16: self.gap_buffer.pop(0)
@@ -54,12 +76,11 @@ class Game:
 		self.speed = 0.05
 		self.run = True
 
-		scrollphat.set_brightness(1)
-
 		while self.run:
 			self.step()
 			#self.print_field()
-			self.print_phat()
+			if SCREEN_TYPE == "UNICORN": self.print_unicorn()
+			if SCREEN_TYPE == "SCROLL": self.print_scroll()
 			print(self.distance)
 			time.sleep(self.speed)
 
@@ -67,11 +88,21 @@ class Game:
 		self.distance += 1
 		self.field.update()
 		#self.ai.next_move()
-		self.ai.better_move(50)
+		self.ai.better_move(50) # Number determines the number of iterations done every move, affected by CPU-power
 		if self.field.buffer[self.ai.player.x][self.ai.player.y] == 1:
-			self.game_over()
+			if SCREEN_TYPE == "UNICORN": self.game_over_unicorn()
+			if SCREEN_TYPE == "SCROLL": self.game_over_scroll()
 
-	def game_over(self):
+	def game_over_unicorn(self):
+		shader = lambda x, y: return (x/7.0) * 255, 0, (y/7.0) * 255
+		width, height = get_shape()
+		for x in range(width):
+			time.sleep(0.05)
+			for y in range(height):
+				r, g, b = shader(x, y)
+				set_pixel(x, y, r, g, b)
+
+	def game_over_scroll(self):
 		for i in range(1):
 			self.set_checker(0)
 			time.sleep(0.5)
@@ -79,6 +110,7 @@ class Game:
 			time.sleep(0.5)
 		self.run = False
 
+	# XXX make separate end-game-function for different screens
 	def set_checker(self, offset):
 		scrollphat.clear()
 		n = offset
@@ -88,9 +120,19 @@ class Game:
 				n += 1
 		scrollphat.update()
 
-	def print_phat(self):
-		scrollphat.clear()
+	def print_unicorn(self):
+		unicorn.clear()
+		for x, col in enumerate(self.field.buffer):
+			for y, pixel in enumerate(col):
+				if pixel: r, g, b = CAVE_COLOR
+				else: r, g, b = BG_COLOR
+				unicorn.set_pixel(x, y, r, g, b)
+		r, g, b = PLAYER_COLOR
+		unicorn.set_pixel(self.ai.player.x, self.ai.player.y, r, g, b)
+        unicorn.show()
 
+	def print_scroll(self):
+		scrollphat.clear()
 		#print(self.ai.player.x, self.ai.player.y)
 		for x, col in enumerate(self.field.buffer):
 			for y, pixel in enumerate(col):
