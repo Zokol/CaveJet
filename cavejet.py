@@ -94,12 +94,12 @@ class Game:
 			if SCREEN_TYPE == "SCROLL": self.game_over_scroll()
 
 	def game_over_unicorn(self):
-		shader = lambda x, y: return (x/7.0) * 255, 0, (y/7.0) * 255
+		#shader = lambda x, y: return (x/7.0) * 255, 0, (y/7.0) * 255
 		width, height = get_shape()
 		for x in range(width):
 			time.sleep(0.05)
 			for y in range(height):
-				r, g, b = shader(x, y)
+				r, g, b = [200,0,0]
 				set_pixel(x, y, r, g, b)
 
 	def game_over_scroll(self):
