@@ -151,6 +151,37 @@ class AI:
 		self.field = field
 
 	"""
+	Filter possible moves
+
+	This is simple fundtion to figure out where player can move
+	"""
+	def filter_moves(self, layer):
+		if layer[player_coords['y']] == 1:
+			break
+		possible_moves = [-1, 0, 1] # List all possible moves player can take; move up, move down or keep the place
+
+		# Detect that the player is next to the screen edge
+		if player_coords['y'] == SCREEN_HEIGHT - 1:
+			try: possible_moves.remove(1)
+			except ValueError: pass
+			if layer[player_coords['y'] - 1] == 1:
+				try: possible_moves.remove(-1)
+				except ValueError: pass
+		elif 1 <= player_coords['y'] <= 3:
+			if layer[player_coords['y'] - 1] == 1:
+				try: possible_moves.remove(-1)
+				except ValueError: pass
+			if layer[player_coords['y'] + 1] == 1:
+				try: possible_moves.remove(1)
+				except ValueError: pass
+		elif player_coords['y'] == 0:
+			try: possible_moves.remove(-1)
+			except ValueError: pass
+			if layer[player_coords['y'] + 1] == 1:
+				try: possible_moves.remove(1)
+				except ValueError: pass
+		return possible_moves
+
 	"""
 	Evaluate path
 
@@ -203,30 +234,7 @@ class AI:
 			player_coords = {'x': self.player.x, 'y': self.player.y}
 			moves = []
 			for layer in self.field.buffer[player_coords['x']:]:
-				if layer[player_coords['y']] == 1:
-					break
-				possible_moves = [-1, 0, 1] # List all possible moves player can take; move up, move down or keep the place
-
-				# Detect that the player is next to the screen edge
-				if player_coords['y'] == SCREEN_HEIGHT - 1:
-					try: possible_moves.remove(1)
-					except ValueError: pass
-					if layer[player_coords['y'] - 1] == 1:
-						try: possible_moves.remove(-1)
-						except ValueError: pass
-				elif 1 <= player_coords['y'] <= 3:
-					if layer[player_coords['y'] - 1] == 1:
-						try: possible_moves.remove(-1)
-						except ValueError: pass
-					if layer[player_coords['y'] + 1] == 1:
-						try: possible_moves.remove(1)
-						except ValueError: pass
-				elif player_coords['y'] == 0:
-					try: possible_moves.remove(-1)
-					except ValueError: pass
-					if layer[player_coords['y'] + 1] == 1:
-						try: possible_moves.remove(1)
-						except ValueError: pass
+				possible_moves = filter_moves(layer)
 				move = random.choice(possible_moves)
 					
 				player_coords['y'] += move
