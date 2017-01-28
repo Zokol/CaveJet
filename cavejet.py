@@ -50,7 +50,7 @@ class Field:
 		if diff_width + self.gap_buffer[-1][1] > screen_size[0]: diff_width = -1 
 
 		self.gap_buffer.append((self.gap_buffer[-1][0] + diff_place, self.gap_buffer[-1][1] + diff_width))
-		if len(self.gap_buffer) > 16: self.gap_buffer.pop(0)
+		if len(self.gap_buffer) > SCREEN_WIDTH: self.gap_buffer.pop(0)
 		
 		col = [1] * len(self.buffer[0])
 		for pixel_i in range(0, self.gap_buffer[-1][1]):
