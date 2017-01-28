@@ -15,7 +15,9 @@ if SCREEN_TYPE == "UNICORN":
 	RGB_ENABLED = True
 
 	BG_COLOR = [0, 0, 0]
-	CAVE_COLOR = [255, 255, 255]
+	BG_NOISE = 2
+	CAVE_COLOR = [139,69,19]
+	CAVE_NOISE = 10
 	PLAYER_COLOR = [255, 0, 0]
 
 if SCREEN_TYPE == "SCROLL":
@@ -120,8 +122,8 @@ class Game:
 		unicorn.clear()
 		for x, col in enumerate(self.field.buffer):
 			for y, pixel in enumerate(col):
-				if pixel: r, g, b = CAVE_COLOR
-				else: r, g, b = BG_COLOR
+				if pixel: r, g, b = [i + random.randint(0,CAVE_NOISE) for i in CAVE_COLOR]
+				else: r, g, b = [i + random.randint(0,BG_NOISE) for i in BG_COLOR]
 				unicorn.set_pixel(x, y, r, g, b)
 		r, g, b = PLAYER_COLOR
 		unicorn.set_pixel(self.ai.player.x, self.ai.player.y, r, g, b)
