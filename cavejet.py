@@ -156,8 +156,6 @@ class AI:
 	This is simple fundtion to figure out where player can move
 	"""
 	def filter_moves(self, layer):
-		if layer[player_coords['y']] == 1:
-			break
 		possible_moves = [-1, 0, 1] # List all possible moves player can take; move up, move down or keep the place
 
 		# Detect that the player is next to the screen edge
@@ -241,6 +239,8 @@ class AI:
 			player_coords = {'x': self.player.x, 'y': self.player.y}
 			moves = []
 			for layer in self.field.buffer[player_coords['x']:]:
+				if layer[player_coords['y']] == 1:
+					break
 				possible_moves = filter_moves(layer)
 				move = random.choice(possible_moves)
 					
@@ -281,15 +281,17 @@ class AI:
 		if depth_limit == 0:
 			return moves
 		else:
-			for layer in self.field.buffer[player_coords['x']:]:
-				possible_moves = filter_moves(layer)
+			layer = self.field.buffer[player_coords['x'] + len(moves)]
+			if layer[player_coords['y']] == 1:
+				return moves
+			possible_moves = filter_moves(layer)
 
-				paths = []
-				for move in possible_moves:
-					paths.append(self.even_better_move(depth_limit, moves + [move]))
+			paths = []
+			for move in possible_moves:
+				paths.append(self.even_better_move(depth_limit, moves + [move]))
 				
-				best_path = max(paths, key=lambda x: evaluate_path(x))
-				return best_path
+			best_path = max(paths, key=lambda x: evaluate_path(x))
+			return best_path
 
 if __name__ == "__main__":
 	record = 0
