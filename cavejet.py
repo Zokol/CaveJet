@@ -129,7 +129,7 @@ class Game:
 				unicorn.set_pixel(x, y, r, g, b)
 		r, g, b = PLAYER_COLOR
 		unicorn.set_pixel(self.ai.player.x, self.ai.player.y, r, g, b)
-        unicorn.show()
+		unicorn.show()
 
 	def print_scroll(self):
 		scrollphat.clear()
