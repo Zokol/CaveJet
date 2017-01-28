@@ -77,12 +77,14 @@ class Game:
 		self.speed = 0.05
 		self.run = True
 
+	def start(self):
 		while self.run:
 			self.step()
 			if SCREEN_TYPE == "UNICORN": self.print_unicorn()
 			if SCREEN_TYPE == "SCROLL": self.print_scroll()
-			print(self.distance)
+			#print(self.distance)
 			time.sleep(self.speed)
+		return self.distance
 
 	def step(self):
 		self.distance += 1
@@ -256,5 +258,11 @@ class AI:
 			return 0
 
 if __name__ == "__main__":
-	while True:
-		game = Game()
+	record = 0
+	try:
+		while True:
+			game = Game()
+			distance = game.start()
+			if record < distance: record = distance
+	except:
+		print("Best score:", record)
