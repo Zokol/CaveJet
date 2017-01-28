@@ -276,7 +276,17 @@ class AI:
 	def even_better_move(self, depth_limit, moves = []):
 		depth_limit -= 1
 		if depth_limit == 0:
-			return 0
+			return moves
+		else:
+			for layer in self.field.buffer[player_coords['x']:]:
+				possible_moves = filter_moves(layer)
+				
+				paths = []
+				for move in possible_moves:
+					paths.append(self.even_better_move(depth_limit, moves + [move]))
+				
+				best_path = max(paths, key=lambda x: evaluate_path(x))
+				return best_path
 
 if __name__ == "__main__":
 	record = 0
