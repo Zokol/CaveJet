@@ -70,7 +70,6 @@ class Player:
 class Game:
 	def __init__(self):
 		self.distance = 0
-		
 		self.field = Field(screen_size)
 		self.ai = AI(self.field)
 		self.speed = 0.05
@@ -78,7 +77,6 @@ class Game:
 
 		while self.run:
 			self.step()
-			#self.print_field()
 			if SCREEN_TYPE == "UNICORN": self.print_unicorn()
 			if SCREEN_TYPE == "SCROLL": self.print_scroll()
 			print(self.distance)
@@ -87,7 +85,6 @@ class Game:
 	def step(self):
 		self.distance += 1
 		self.field.update()
-		#self.ai.next_move()
 		self.ai.better_move(50) # Number determines the number of iterations done every move, affected by CPU-power
 		if self.field.buffer[self.ai.player.x][self.ai.player.y] == 1:
 			if SCREEN_TYPE == "UNICORN": self.game_over_unicorn()
@@ -110,7 +107,6 @@ class Game:
 			time.sleep(0.5)
 		self.run = False
 
-	# XXX make separate end-game-function for different screens
 	def set_checker(self, offset):
 		scrollphat.clear()
 		n = offset
@@ -133,7 +129,6 @@ class Game:
 
 	def print_scroll(self):
 		scrollphat.clear()
-		#print(self.ai.player.x, self.ai.player.y)
 		for x, col in enumerate(self.field.buffer):
 			for y, pixel in enumerate(col):
 				scrollphat.set_pixel(x,y,pixel)
@@ -151,7 +146,6 @@ class AI:
 
 	def next_move(self):
 		next_col = self.field.buffer[self.player.x + 1]
-		#next2_col = self.field.buffer[self.player.x + 2]
 		print(next_col, next_col[self.player.y])
 		if next_col[self.player.y] == 1:
 			if self.player.y < 4:
@@ -162,17 +156,6 @@ class AI:
 				if next_col[self.player.y - 1] == 0:
 					self.player.y -= 1
 					return 0
-		"""
-		elif next2_col[self.player.y] == 1:
-			if self.player.y < 3:
-				if next2_col[self.player.y + 2] == 0:
-					self.player.y += 1
-					return 0
-			if self.player.y > 1:
-				if next2_col[self.player.y - 2] == 0:
-					self.player.y -= 1
-					return 0
-		"""
 
 	def better_move(self, iterations):
 		move_weight = {-1: -1, 0: 0, 1: -1}
