@@ -9,7 +9,7 @@ if SCREEN_TYPE == "UNICORN":
 	import unicornhat as unicorn
 	unicorn.set_layout(unicorn.AUTO)
 	unicorn.rotation(0)
-	unicorn.brightness(0.2)
+	unicorn.brightness(0.5)
 	SCREEN_WIDTH, SCREEN_HEIGHT = unicorn.get_shape()
 	screen_size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 	RGB_ENABLED = True
