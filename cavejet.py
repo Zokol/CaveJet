@@ -223,7 +223,10 @@ class AI:
 			if best["score"] < score: 
 				best["score"] = score
 				best["moves"] = moves
-		self.player.y += best["moves"][0]
+		if len(best["moves"]) >= 1: 
+			self.player.y += best["moves"][0] # Found some good moves!
+		else:
+			self.player.y += 0 # Oh no! There seems to be nothing I can do, so best to head straight and hope that the wall is thin..
 
 if __name__ == "__main__":
 	while True:
