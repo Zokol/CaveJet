@@ -264,7 +264,7 @@ class AI:
 		4) Move player according to the best move we know.
 
 	It is quite clear that if we calculate this after every step player takes, and the field is giving us lots of room to move, 
-	this recursive tactic spirals out of control prettu fast. It's dependent on how much memory and CPU-power we have, but there
+	this recursive tactic spirals out of control pretty fast. It's dependent on how much memory and CPU-power we have, but there
 	should be some way of controlling this recursion.
 	Thus, the only parameter given to the algorithm is very very very important. It behaves like TTL-value in network packets.
 	The depth_limit is reduced by one each time it is passed onwards and checked if it reaches zero. If it does, the recursion ends
