@@ -229,8 +229,8 @@ class AI:
 				best["moves"] = moves
 		if len(best["moves"]) >= 1: 
 			self.player.y += best["moves"][0] # Found some good moves!
-		else:
-			self.player.y += 0 # Oh no! There seems to be nothing I can do, so best to head straight and hope that the wall is thin..
+		#else:
+		#	self.player.y += 0 # Oh no! There seems to be nothing I can do, so best to head straight and hope that the wall is thin..
 
 	"""
 	Recursive AI
