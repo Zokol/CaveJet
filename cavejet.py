@@ -146,6 +146,11 @@ class AI:
 		self.player = Player()
 		self.field = field
 
+	"""
+	Myopic AI
+
+	This algorithm is very very near-sighted, and it's flying in fog, and it's raining... wait, can that happen? *wanders off to r/askreddit/*
+	"""
 	def next_move(self):
 		next_col = self.field.buffer[self.player.x + 1]
 		print(next_col, next_col[self.player.y])
@@ -159,18 +164,36 @@ class AI:
 					self.player.y -= 1
 					return 0
 
+	"""
+	Random path finding AI
+
+	This algorithm takes all the possible moves and in the case of selection,
+	takes random direction and continues.
+	
+	Algorithm is given number of iterations (computing time) to calculate paths.
+	Each path is evaluated based on pretermined weights (more direct path is better,
+	path that gives player best chances of survival is also better)
+
+	This is better AI than nothing at all, but it still misses a lot of cleverness.
+	It always choses random path, but nothing prevents it to taking the same path twice.
+	So, this AI is waisting valuable computing time, most likely comparing very similar paths.
+	"""
 	def better_move(self, iterations):
-		move_weight = {-1: -1, 0: 0, 1: -1}
-		next_layer_weight = 1
+		move_weight = {-1: -1, 0: 0, 1: -1} ## Every decision is dependent on these numbers. Change these and you will get better or worse AI.
+		next_layer_weight = 1 ## This is also very important.
+
+		## Let the magic happen
 		best = {"score": 0, "moves": []}
-		for iteration in range(iterations):
+		for iteration in range(iterations): # Iterations to find most of the move combinations
 			player_coords = {'x': self.player.x, 'y': self.player.y}
 			moves = []
 			for layer in self.field.buffer[player_coords['x']:]:
 				if layer[player_coords['y']] == 1:
 					break
-				possible_moves = [-1, 0, 1]
-				if player_coords['y'] == 4:
+				possible_moves = [-1, 0, 1] # List all possible moves player can take; move up, move down or keep the place
+
+				# Detect that the player is next to the screen edge
+				if player_coords['y'] == SCREEN_HEIGHT - 1:
 					try: possible_moves.remove(1)
 					except ValueError: pass
 					if layer[player_coords['y'] - 1] == 1:
