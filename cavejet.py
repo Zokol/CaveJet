@@ -151,6 +151,21 @@ class AI:
 		self.field = field
 
 	"""
+	"""
+	Evaluate path
+
+	This function gives score for each path
+	"""
+	def evaluate_path(self, moves):
+		move_weight = {-1: -1, 0: 0, 1: -1} ## Every decision is dependent on these numbers. Change these and you will get better or worse AI.
+		next_layer_weight = 1 ## This is also very important.
+		score = 0
+
+		for move in moves:
+			score += move_weight[move] + next_layer_weight
+		return score
+
+	"""
 	Myopic AI
 
 	This algorithm is very very near-sighted, and it's flying in fog, and it's raining... wait, can that happen? *wanders off to r/askreddit/*
@@ -183,10 +198,6 @@ class AI:
 	So, this AI is waisting valuable computing time, most likely comparing very similar paths.
 	"""
 	def better_move(self, iterations):
-		move_weight = {-1: -1, 0: 0, 1: -1} ## Every decision is dependent on these numbers. Change these and you will get better or worse AI.
-		next_layer_weight = 1 ## This is also very important.
-
-		## Let the magic happen
 		best = {"score": 0, "moves": []}
 		for iteration in range(iterations): # Iterations to find most of the move combinations
 			player_coords = {'x': self.player.x, 'y': self.player.y}
@@ -221,9 +232,8 @@ class AI:
 				player_coords['y'] += move
 				moves.append(move)
 				player_coords['x'] += 1
-			score = 0
-			for move in moves:
-				score += move_weight[move] + next_layer_weight
+
+			score = evaluate_path(moves)
 			if best["score"] < score: 
 				best["score"] = score
 				best["moves"] = moves
