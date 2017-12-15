@@ -3,6 +3,8 @@ Simple AI playing simple game
 
 Created for Pimoroni's Scroll pHAT + Raspberry Pi Zero
 
+Gameplay: https://youtu.be/6IYYVfa6qmk
+
 Contains two main algorithms;
 
 Field.tunnel_gen() - Generates survivable tunnels for the AI to fly through.
