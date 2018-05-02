@@ -202,11 +202,11 @@ class AI:
     """
     def evaluate_path(self, moves):
         move_weight = {-1: -1, 0: 0, 1: -1}  # Every decision is dependent on these numbers. Change these and you will get better or worse AI.
-        next_layer_weight = 1  # This is also very important.
+        next_layer_weight = 3  # This is also very important.
         score = 0
 
         for move in moves:
-            score += move_weight[move] + next_layer_weight
+            score += (move_weight[move] + next_layer_weight)
         return score
 
     """
@@ -315,6 +315,7 @@ class AI:
                 paths.append(self.even_better_move(depth_limit, moves + [move]))
 
             best_path = max(paths, key=lambda x: self.evaluate_path(x))
+
             return best_path
 
 
