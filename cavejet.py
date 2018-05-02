@@ -42,7 +42,7 @@ class GameOver(Exception):
 
 class Field:
     def __init__(self, field_size):
-        self.buffer = [[0] * field_size[0]] * field_size[1]
+        self.buffer = [[0] * field_size[1]] * field_size[0]
         self.gap_buffer = [(1, 3)]
 
     """
