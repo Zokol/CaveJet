@@ -36,6 +36,10 @@ if SCREEN_TYPE == "SCROLLHD":
 screen_size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
 
+class GameOver(Exception):
+    def __init__(self):
+        print("AI found no possible moves")
+
 class Field:
     def __init__(self, field_size):
         self.buffer = [[0] * field_size[0]] * field_size[1]
@@ -212,8 +216,13 @@ class AI:
     """
     def move(self):
         #self.player.y += self.next_move()[0]
-        self.player.y += self.better_move(50)[0]
+        #self.player.y += self.better_move(50)[0]
         #self.player.y += self.even_better_move(3, [])[0]
+        next_moves = self.better_move(50)
+        if len(next_moves) > 0:
+            self.player.y += next_moves[0]
+        else:
+            raise GameOver
 
     """
     Myopic AI
@@ -307,16 +316,10 @@ class AI:
 
 if __name__ == "__main__":
     record = 0
-    """
     try:
         while True:
             game = Game()
             distance = game.start()
             if record < distance: record = distance
-    except:
+    except GameOver:
         print("Best score:", record)
-    """
-    while True:
-        game = Game()
-        distance = game.start()
-        if record < distance: record = distance
