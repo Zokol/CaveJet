@@ -147,7 +147,8 @@ class Game:
             for y, pixel in enumerate(col):
                 scrollphat.set_pixel(x, y, pixel)
         scrollphat.set_pixel(self.ai.player.x, self.ai.player.y, 1)
-        scrollphat.update()
+        if SCREEN_TYPE == "SCROLL": scrollphat.update()
+        if SCREEN_TYPE == "SCROLLHD": scrollphat.show()
 
     def print_field(self):
         for col in self.field.buffer:
