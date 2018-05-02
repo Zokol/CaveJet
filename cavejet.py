@@ -170,27 +170,27 @@ class AI:
 
     This is simple fundtion to figure out where player can move
     """
-    def filter_moves(self, layer):
+    def filter_moves(self, layer, player_y):
         possible_moves = [-1, 0, 1]  # List all possible moves player can take; move up, move down or keep the place
 
         # Detect that the player is next to the screen edge
-        if self.player_coords['y'] == SCREEN_HEIGHT - 1:
+        if player_y == SCREEN_HEIGHT - 1:
             try: possible_moves.remove(1)
             except ValueError: pass
-            if layer[self.player_coords['y'] - 1] == 1:
+            if layer[player_y - 1] == 1:
                 try: possible_moves.remove(-1)
                 except ValueError: pass
-        elif 1 <= self.player_coords['y'] <= 3:
-            if layer[self.player_coords['y'] - 1] == 1:
+        elif 1 <= player_y <= 3:
+            if layer[player_y - 1] == 1:
                 try: possible_moves.remove(-1)
                 except ValueError: pass
-            if layer[self.player_coords['y'] + 1] == 1:
+            if layer[player_y + 1] == 1:
                 try: possible_moves.remove(1)
                 except ValueError: pass
-        elif self.player_coords['y'] == 0:
+        elif player_y == 0:
             try: possible_moves.remove(-1)
             except ValueError: pass
-            if layer[self.player_coords['y'] + 1] == 1:
+            if layer[player_y + 1] == 1:
                 try: possible_moves.remove(1)
                 except ValueError: pass
         return possible_moves
@@ -215,10 +215,11 @@ class AI:
     Uses some available AI-algo to figure out the next move
     """
     def move(self):
+        self.player_coords = {'x': self.player.x, 'y': self.player.y}
         #self.player.y += self.next_move()[0]
         #self.player.y += self.better_move(50)[0]
-        #self.player.y += self.even_better_move(3, [])[0]
-        next_moves = self.better_move(50)
+        next_moves = self.even_better_move(3, [])
+        #next_moves = self.better_move(50)
         if len(next_moves) > 0:
             self.player.y += next_moves[0]
         else:
@@ -261,7 +262,7 @@ class AI:
             for layer in self.field.buffer[self.player_coords['x']:]:
                 if layer[self.player_coords['y']] == 1:
                     break
-                possible_moves = self.filter_moves(layer)
+                possible_moves = self.filter_moves(layer, self.player_coords['y'])
                 move = random.choice(possible_moves)
 
                 self.player_coords['y'] += move
@@ -302,9 +303,12 @@ class AI:
             return moves
         else:
             layer = self.field.buffer[self.player_coords['x'] + len(moves)]
-            if layer[self.player_coords['y']] == 1:
+            player_y = self.player_coords['y']
+            for y_move in moves:
+                player_y += y_move
+            if layer[player_y] == 1:
                 return moves
-            possible_moves = self.filter_moves(layer)
+            possible_moves = self.filter_moves(layer, player_y)
 
             paths = []
             for move in possible_moves:
