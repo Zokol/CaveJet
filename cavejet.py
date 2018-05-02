@@ -28,10 +28,10 @@ if SCREEN_TYPE == "SCROLL":
     scrollphat.set_brightness(1)
 
 if SCREEN_TYPE == "SCROLLHD":
-        import scrollphathd as scrollphat
-        SCREEN_WIDTH = 17
-        SCREEN_HEIGHT = 7
-        scrollphat.set_brightness(1)
+    import scrollphathd as scrollphat
+    SCREEN_WIDTH = 17
+    SCREEN_HEIGHT = 7
+    scrollphat.set_brightness(0.5)
 
 screen_size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
@@ -124,11 +124,12 @@ class Game:
     def set_checker(self, offset):
         scrollphat.clear()
         n = offset
-        for y in range(5):
-            for x in range(11):
+        for y in range(SCREEN_HEIGHT):
+            for x in range(SCREEN_WIDTH):
                 scrollphat.set_pixel(x, y, n % 2 == 0)
                 n += 1
-        scrollphat.update()
+        if SCREEN_TYPE == "SCROLL": scrollphat.update()
+        if SCREEN_TYPE == "SCROLLHD": scrollphat.show()
 
     def print_unicorn(self):
         unicorn.clear()
