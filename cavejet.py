@@ -31,7 +31,7 @@ if SCREEN_TYPE == "SCROLLHD":
     import scrollphathd as scrollphat
     SCREEN_WIDTH = 17
     SCREEN_HEIGHT = 7
-    scrollphat.set_brightness(0.5)
+    scrollphat.set_brightness(0.25)
 
 screen_size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
@@ -321,13 +321,18 @@ class AI:
 
 if __name__ == "__main__":
     record = 0
+    history = []
     while True:
         try:
-            move_cost = -1
-            layer_reward = 3
+            move_cost = random.randint(-50, 0)
+            layer_reward = random.randint(0, 50)
             game = Game(move_weight={-1: move_cost, 0: 0, 1: move_cost}, next_layer_weight=layer_reward, speed=0)
             game.start()
         except GameOver:
-            if record < game.distance: record = game.distance
+            history.append({"score": game.distance, "move_cost": move_cost, "layer_reward": layer_reward})
+            if record < game.distance:
+                record = game.distance
             print("Score:", game.distance, " | Best score:", record)
             continue
+        except KeyboardInterrupt:
+            print(history)
