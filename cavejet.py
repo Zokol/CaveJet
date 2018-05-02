@@ -326,8 +326,8 @@ if __name__ == "__main__":
             move_cost = -1
             layer_reward = 3
             game = Game(move_weight={-1: move_cost, 0: 0, 1: move_cost}, next_layer_weight=layer_reward, speed=0)
-            distance = game.start()
-            if record < distance: record = distance
-            print("Score:", distance, " | Best score:", record)
+            game.start()
         except GameOver:
+            if record < game.distance: record = game.distance
+            print("Score:", game.distance, " | Best score:", record)
             continue
