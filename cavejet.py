@@ -84,11 +84,11 @@ class Player:
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, move_weight={-1: -1, 0: 0, 1: -1}, next_layer_weight=3, speed=0.05):
         self.distance = 0
         self.field = Field(screen_size)
-        self.ai = AI(self.field)
-        self.speed = 0.05
+        self.ai = AI(self.field, move_weight, next_layer_weight)
+        self.speed = speed
         self.run = True
 
     def start(self):
@@ -161,9 +161,11 @@ class Game:
 
 
 class AI:
-    def __init__(self, field):
+    def __init__(self, field, move_weight={-1: -1, 0: 0, 1: -1}, next_layer_weight=3):
         self.player = Player()
         self.field = field
+        self.move_weight = move_weight  # Every decision is dependent on these numbers. Change these and you will get better or worse AI.
+        self.next_layer_weight = next_layer_weight  # This is also very important.
 
     """
     Filter possible moves
@@ -201,12 +203,10 @@ class AI:
     This function gives score for each path
     """
     def evaluate_path(self, moves):
-        move_weight = {-1: -1, 0: 0, 1: -1}  # Every decision is dependent on these numbers. Change these and you will get better or worse AI.
-        next_layer_weight = 3  # This is also very important.
         score = 0
 
         for move in moves:
-            score += (move_weight[move] + next_layer_weight)
+            score += (self.move_weight[move] + self.next_layer_weight)
         return score
 
     """
@@ -321,10 +321,13 @@ class AI:
 
 if __name__ == "__main__":
     record = 0
-    try:
-        while True:
-            game = Game()
+    while True:
+        try:
+            move_cost = -1
+            layer_reward = 3
+            game = Game(move_weight={-1: move_cost, 0: 0, 1: move_cost}, next_layer_weight=layer_reward, speed=0)
             distance = game.start()
             if record < distance: record = distance
-    except GameOver:
-        print("Best score:", record)
+        except GameOver:
+            print("Score:", distance, " | Best score:", record)
+            continue
