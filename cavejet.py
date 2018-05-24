@@ -6,6 +6,9 @@ import time
 SCREEN_TYPE = "SCROLLHD"
 RGB_ENABLED = False
 
+STUDY_LOOP = False
+LOOP = False
+
 if SCREEN_TYPE == "UNICORN":
     import unicornhat as unicorn
     unicorn.set_layout(unicorn.AUTO)
@@ -318,21 +321,45 @@ class AI:
 
             return best_path
 
+def run_game():
+    try:
+        move_cost = random.randint(-50, 0)
+        layer_reward = random.randint(0, 50)
+        game = Game(move_weight={-1: move_cost, 0: 0, 1: move_cost}, next_layer_weight=layer_reward, speed=0)
+        game.start()
+    except GameOver:
+        history.append({"score": game.distance, "move_cost": move_cost, "layer_reward": layer_reward})
+        if record < game.distance:
+            record = game.distance
+        print("Score:", game.distance)
+    except KeyboardInterrupt:
+        print("Quitting")
 
-if __name__ == "__main__":
+def study_loop():
+    logfile = open("cavejet_AI.log", 'a+')
     record = 0
     history = []
     while True:
         try:
-            move_cost = random.randint(-50, 0)
-            layer_reward = random.randint(0, 50)
+            move_cost = random.randint(-18, -15)
+            layer_reward = random.randint(32, 36)
             game = Game(move_weight={-1: move_cost, 0: 0, 1: move_cost}, next_layer_weight=layer_reward, speed=0)
             game.start()
         except GameOver:
             history.append({"score": game.distance, "move_cost": move_cost, "layer_reward": layer_reward})
+            logfile.write(str(game.distance) + ',' + str(move_cost) + ',' + str(layer_reward) + '\r\n')
             if record < game.distance:
                 record = game.distance
             print("Score:", game.distance, " | Best score:", record)
-            continue
         except KeyboardInterrupt:
-            print(history)
+            logfile.close()
+            raise
+
+if __name__ == "__main__":
+    if STUDY_LOOP:
+        study_loop()
+    elif LOOP:
+        while True:
+            run_game()
+    else:
+        run_game()
