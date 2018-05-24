@@ -328,10 +328,7 @@ def run_game():
         game = Game(move_weight={-1: move_cost, 0: 0, 1: move_cost}, next_layer_weight=layer_reward, speed=0)
         game.start()
     except GameOver:
-        history.append({"score": game.distance, "move_cost": move_cost, "layer_reward": layer_reward})
-        if record < game.distance:
-            record = game.distance
-        print("Score:", game.distance)
+        print({"score": game.distance, "move_cost": move_cost, "layer_reward": layer_reward})
     except KeyboardInterrupt:
         print("Quitting")
 
