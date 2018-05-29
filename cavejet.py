@@ -103,7 +103,7 @@ class Player:
 
 
 class Game:
-    def __init__(self, move_weight={-1: -1, 0: 0, 1: -1}, next_layer_weight=3, speed=None):
+    def __init__(self, move_weight={-1: -1, 0: 0, 1: -1}, next_layer_weight=3, speed=0.1):
         self.distance = 0
         self.field = Field(screen_size)
         self.ai = AI(self.field, move_weight, next_layer_weight)
@@ -198,7 +198,7 @@ class AI:
     This is simple fundtion to figure out where player can move
     """
     def filter_moves(self, layer, player_y):
-        possible_moves = [-1, 0, 1]  # List all possible moves player can take; move up, move down or keep the place
+        possible_moves = [0, -1, 1]  # List all possible moves player can take; move up, move down or keep the place
 
         # Detect that the player is next to the screen edge
         if player_y == SCREEN_HEIGHT - 1:
