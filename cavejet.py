@@ -351,8 +351,10 @@ class AI:
 
 def run_game():
     try:
-        move_cost = -16
-        layer_reward = 34
+        #move_cost = -16
+        #layer_reward = 34
+        move_cost = -1
+        layer_reward = 10
         game = Game(move_weight={-1: move_cost, 0: 0, 1: move_cost}, next_layer_weight=layer_reward, speed=0)
         game.start()
     except GameOver:
