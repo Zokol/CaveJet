@@ -352,18 +352,17 @@ class AI:
                 print(row)
             return moves                # Returing route
         else:
-            current_layer = self.field.buffer[self.player_coords['x'] + len(moves) - 1]
             next_layer = self.field.buffer[self.player_coords['x'] + len(moves)]
             player_y = self.player_coords['y']
             
             if len(moves) > 0:
-                for y_move in moves:
+                for layer_i, y_move in enumerate(moves):
+                    move_layer = self.field.buffer[self.player_coords['x'] + layer_i + 1]
                     player_y += y_move
-            
-                if current_layer[player_y] == 1:    # Hit a wall with this route
-                    print("layer:", current_layer)
-                    print("This path", moves, "hits the wall, returning None")
-                    return None            # Returning None
+                    if move_layer[player_y] == 1:    # Hit a wall with this route
+                        print("layer:", move_layer)
+                        print("This path", moves, "hits the wall, returning None")
+                        return None            # Returning None
             
             possible_moves = self.filter_moves(next_layer, player_y)
 
