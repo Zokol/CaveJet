@@ -50,7 +50,7 @@ screen_size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 class GameOver(Exception):
     def __init__(self):
         print("AI found no possible moves")
-        input("quit?")
+        #input("quit?")
 
 class Field:
     def __init__(self, field_size):
@@ -215,10 +215,12 @@ class AI:
             if layer[player_y + 1] == 1:
                 try: possible_moves.remove(1)
                 except ValueError: pass
+        """
         if len(possible_moves) == 0:
             print("No possible moves to next layer!!")
         if len(possible_moves) == 1:
             print("Only one possible move")
+        """
         return possible_moves
 
     """
@@ -245,21 +247,21 @@ class AI:
             #self.player.y += self.better_move(50)[0]
             possible_paths = self.even_better_move(AI_VISIBILITY_DEPTH, [])
             if possible_paths is None:
-                print("Path finder returned None")
+                #print("Path finder returned None")
                 raise GameOver
             if len(possible_paths) == 0:
-                print("Path finder returned empty list of paths")
+                #print("Path finder returned empty list of paths")
                 raise GameOver
             for path in possible_paths:
                 path_score = self.evaluate_path(path)
-                print("Path:", path, "Score:", path_score)
+                #print("Path:", path, "Score:", path_score)
             self.next_moves = max(possible_paths, key=lambda x: self.evaluate_path(x))  # Selecting the best path using evaluation-function
-            print("Selected path:", self.next_moves, "With value:", self.evaluate_path(self.next_moves))
-            print("selected path length:", len(self.next_moves))
+            #print("Selected path:", self.next_moves, "With value:", self.evaluate_path(self.next_moves))
+            #print("selected path length:", len(self.next_moves))
             #next_moves = self.better_move(50)
 
             if len(self.next_moves) == 0:
-                print("Selected empty list of paths")
+                #print("Selected empty list of paths")
                 raise GameOver
         self.player.y += self.next_moves.pop(0)
 
@@ -361,8 +363,8 @@ class AI:
                     move_layer = self.field.buffer[self.player_coords['x'] + layer_i + 1]
                     player_y += y_move
                     if move_layer[player_y] == 1:    # Hit a wall with this route
-                        print("layer:", move_layer)
-                        print("This path", moves, "hits the wall, returning None")
+                        #print("layer:", move_layer)
+                        #print("This path", moves, "hits the wall, returning None")
                         return None            # Returning None
             
             possible_moves = self.filter_moves(next_layer, player_y)
