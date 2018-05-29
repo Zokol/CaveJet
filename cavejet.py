@@ -252,7 +252,7 @@ class AI:
                 print("Path:", path, "Score:", path_score)
             self.next_moves = max(possible_paths, key=lambda x: self.evaluate_path(x))  # Selecting the best path using evaluation-function
             print("Selected path:", self.next_moves, "With value:", self.evaluate_path(self.next_moves))
-            print("selected path length": len(self.next_moves))
+            print("selected path length:", len(self.next_moves))
             #next_moves = self.better_move(50)
 
             if len(self.next_moves) == 0:
