@@ -245,8 +245,10 @@ class AI:
             #self.player.y += self.better_move(50)[0]
             possible_paths = self.even_better_move(AI_VISIBILITY_DEPTH, [])
             if possible_paths is None:
+                print("Path finder returned None")
                 raise GameOver
             if len(possible_paths) == 0:
+                print("Path finder returned empty list of paths")
                 raise GameOver
             for path in possible_paths:
                 path_score = self.evaluate_path(path)
@@ -257,6 +259,7 @@ class AI:
             #next_moves = self.better_move(50)
 
             if len(self.next_moves) == 0:
+                print("Selected empty list of paths")
                 raise GameOver
         else:
             self.player.y += self.next_moves.pop(0)
