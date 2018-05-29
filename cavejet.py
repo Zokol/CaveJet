@@ -50,6 +50,7 @@ screen_size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 class GameOver(Exception):
     def __init__(self):
         print("AI found no possible moves")
+        input("quit?")
 
 class Field:
     def __init__(self, field_size):
