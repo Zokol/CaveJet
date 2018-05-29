@@ -14,7 +14,8 @@ TUNNEL_GAP_MAX = 4
 TUNNEL_GAP_DIFF_MAX = 1
 TUNNEL_MOVE_DIFF_MAX = 1
 
-AI_VISIBILITY_DEPTH = 17
+AI_VISIBILITY_DEPTH = 5
+AI_REROUTE_DEPTH = 2
 
 if SCREEN_TYPE == "UNICORN":
     import unicornhat as unicorn
@@ -234,7 +235,7 @@ class AI:
     """
     def move(self):
         self.player_coords = {'x': self.player.x, 'y': self.player.y}
-        if len(self.next_moves) <= AI_VISIBILITY_DEPTH/2:
+        if len(self.next_moves) <= AI_REROUTE_DEPTH:
             #self.player.y += self.next_move()[0]
             #self.player.y += self.better_move(50)[0]
             possible_paths = self.even_better_move(AI_VISIBILITY_DEPTH, [])
