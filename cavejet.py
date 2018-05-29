@@ -339,7 +339,7 @@ class AI:
     def even_better_move(self, depth_limit, moves=[]):
         depth_limit -= 1
         if depth_limit == 0:            # Hit depth limit without hitting the wall
-            print(" " * self.player_coords['x'], moves)
+            print([" " * self.player_coords['x']] + ''.join(moves))
             for y in range(SCREEN_HEIGHT):
                 row = ""
                 for x, layer in enumerate(self.field.buffer):
