@@ -80,7 +80,7 @@ class Field:
         if len(self.gap_buffer) > SCREEN_WIDTH: self.gap_buffer.pop(0)
 
         col = [1] * len(self.buffer[0])
-        for pixel_i in range(0, self.gap_buffer[-1][1]):
+        for pixel_i in range(0, self.gap_buffer[-1][1] + 1):
             try: col[pixel_i + self.gap_buffer[-1][0]] = 0
             except IndexError: pass
 
