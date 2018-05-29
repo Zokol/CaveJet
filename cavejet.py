@@ -14,6 +14,8 @@ TUNNEL_GAP_MAX = 4
 TUNNEL_GAP_DIFF_MAX = 1
 TUNNEL_MOVE_DIFF_MAX = 1
 
+AI_VISIBILITY_DEPTH = 7
+
 if SCREEN_TYPE == "UNICORN":
     import unicornhat as unicorn
     unicorn.set_layout(unicorn.AUTO)
@@ -235,7 +237,7 @@ class AI:
         if len(self.next_moves) == 0:
             #self.player.y += self.next_move()[0]
             #self.player.y += self.better_move(50)[0]
-            possible_paths = self.even_better_move(3, [])
+            possible_paths = self.even_better_move(AI_VISIBILITY_DEPTH, [])
             if possible_paths is None:
                 raise GameOver
             if len(possible_paths) == 0:
