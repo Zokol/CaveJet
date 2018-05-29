@@ -63,18 +63,18 @@ class Field:
     """
     def tunnel_gen(self):
         if self.gap_buffer[-1][0] == 0:                             # Is the current place at screen edge?
-            diff_place += random.randint(0, TUNNEL_MOVE_DIFF_MAX)   # Go away or stay at screen edge
+            diff_place = random.randint(0, TUNNEL_MOVE_DIFF_MAX)   # Go away or stay at screen edge
         elif self.gap_buffer[-1][0] == SCREEN_HEIGHT - 1:           # Is the current place at screen edge?
-            diff_place += random.randint(-TUNNEL_MOVE_DIFF_MAX, 0)  # Go away or stay at screen edge
+            diff_place = random.randint(-TUNNEL_MOVE_DIFF_MAX, 0)  # Go away or stay at screen edge
         else:
-            diff_place += random.randint(-TUNNEL_MOVE_DIFF_MAX, TUNNEL_MOVE_DIFF_MAX)  # Not at screen edge, can move freely
+            diff_place = random.randint(-TUNNEL_MOVE_DIFF_MAX, TUNNEL_MOVE_DIFF_MAX)  # Not at screen edge, can move freely
 
-        if diff_width == TUNNEL_GAP_MIN:                            # Is gap at minimum?
-            diff_width += random.randint(0, TUNNEL_GAP_DIFF_MAX)    # Go larger or stay at same
-        if diff_width == TUNNEL_GAP_MAX:                            # Is gap at maximum?
-            diff_width += random.randint(-TUNNEL_GAP_DIFF_MAX, 0)   # Go smaller or stay at same
+        if self.gap_buffer[-1][1] == TUNNEL_GAP_MIN:                            # Is gap at minimum?
+            diff_width = random.randint(0, TUNNEL_GAP_DIFF_MAX)    # Go larger or stay at same
+        if self.gap_buffer[-1][1] == TUNNEL_GAP_MAX:                            # Is gap at maximum?
+            diff_width = random.randint(-TUNNEL_GAP_DIFF_MAX, 0)   # Go smaller or stay at same
         else:
-            diff_width += random.randint(-TUNNEL_GAP_DIFF_MAX, TUNNEL_GAP_DIFF_MAX)   # Adjust freely
+            diff_width = random.randint(-TUNNEL_GAP_DIFF_MAX, TUNNEL_GAP_DIFF_MAX)   # Adjust freely
 
         self.gap_buffer.append((self.gap_buffer[-1][0] + diff_place, self.gap_buffer[-1][1] + diff_width))
         if len(self.gap_buffer) > SCREEN_WIDTH: self.gap_buffer.pop(0)
