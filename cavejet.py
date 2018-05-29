@@ -233,14 +233,17 @@ class AI:
         self.player_coords = {'x': self.player.x, 'y': self.player.y}
         #self.player.y += self.next_move()[0]
         #self.player.y += self.better_move(50)[0]
-        next_moves = self.even_better_move(3, [])
-        #next_moves = self.better_move(50)
-        if next_moves is None:
+        possible_paths = self.even_better_move(3, [])
+        if possible_paths is None:
             raise GameOver
+        if len(possible_paths) == 0:
+            raise GameOver
+        next_moves = max(possible_paths, key=lambda x: self.evaluate_path(x))  # Selecting the best path using evaluation-function
+        #next_moves = self.better_move(50)
+
         if len(next_moves) == 0:
             raise GameOver
-        else:
-            self.player.y += next_moves[0]
+        self.player.y += next_moves[0]
 
     """
     Myopic AI
@@ -334,7 +337,7 @@ class AI:
                     paths.append(returned_path)     # Adding path to list of possible paths
 
             if len(paths) > 0:
-                return max(paths, key=lambda x: self.evaluate_path(x))  # Selecting the best path using evaluation-function
+                return paths
             else:
                 return None        # Found no paths that would not hit the wall
 
