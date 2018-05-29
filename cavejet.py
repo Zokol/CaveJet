@@ -339,16 +339,17 @@ class AI:
     def even_better_move(self, depth_limit, moves=[]):
         depth_limit -= 1
         if depth_limit == 0:            # Hit depth limit without hitting the wall
-            print("Found route", moves)
+            print(" " * self.player_coords['x'], moves)
             for y in range(SCREEN_HEIGHT):
                 row = ""
                 for x, layer in enumerate(self.field.buffer):
-                    if x == self.player.x and y == self.player.y:
+                    if x == self.player_coords['x'] and y == self.player_coords['y']:
                         row += "X"
-                    if layer[y] == 1:
+                    elif layer[y] == 1:
                         row += "*"
                     else:
                         row += " "
+                print(row)
             return moves                # Returing route
         else:
             current_layer = self.field.buffer[self.player_coords['x'] + len(moves) - 1]
