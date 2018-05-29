@@ -261,8 +261,7 @@ class AI:
             if len(self.next_moves) == 0:
                 print("Selected empty list of paths")
                 raise GameOver
-        else:
-            self.player.y += self.next_moves.pop(0)
+        self.player.y += self.next_moves.pop(0)
 
     """
     Myopic AI
