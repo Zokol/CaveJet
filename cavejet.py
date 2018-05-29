@@ -341,7 +341,7 @@ class AI:
         if depth_limit == 0:            # Hit depth limit without hitting the wall
             return moves                # Returing route
         else:
-            layer = self.field.buffer[self.player_coords['x'] + len(moves)]
+            layer = self.field.buffer[self.player_coords['x'] + len(moves) -1]
             player_y = self.player_coords['y']
             if len(moves) > 0:
                 for y_move in moves:
