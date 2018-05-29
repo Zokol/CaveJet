@@ -234,7 +234,7 @@ class AI:
     """
     def move(self):
         self.player_coords = {'x': self.player.x, 'y': self.player.y}
-        if len(self.next_moves) == 0:
+        if len(self.next_moves) <= AI_VISIBILITY_DEPTH/3:
             #self.player.y += self.next_move()[0]
             #self.player.y += self.better_move(50)[0]
             possible_paths = self.even_better_move(AI_VISIBILITY_DEPTH, [])
