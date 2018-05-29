@@ -178,6 +178,7 @@ class Game:
 class AI:
     def __init__(self, field, move_weight={-1: -1, 0: 0, 1: -1}, next_layer_weight=3):
         self.player = Player()
+        self.next_moves = []
         self.field = field
         self.move_weight = move_weight  # Every decision is dependent on these numbers. Change these and you will get better or worse AI.
         self.next_layer_weight = next_layer_weight  # This is also very important.
