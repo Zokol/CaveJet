@@ -235,7 +235,9 @@ class AI:
         #self.player.y += self.better_move(50)[0]
         next_moves = self.even_better_move(3, [])
         #next_moves = self.better_move(50)
-        if len(next_moves) == 0 or next_moves is None:
+        if next_moves is None:
+            raise GameOver
+        if len(next_moves) == 0:
             raise GameOver
         else:
             self.player.y += next_moves[0]
