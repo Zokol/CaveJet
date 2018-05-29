@@ -235,10 +235,10 @@ class AI:
         #self.player.y += self.better_move(50)[0]
         next_moves = self.even_better_move(3, [])
         #next_moves = self.better_move(50)
-        if len(next_moves) > 0:
-            self.player.y += next_moves[0]
-        else:
+        if len(next_moves) == 0 or next_moves is None:
             raise GameOver
+        else:
+            self.player.y += next_moves[0]
 
     """
     Myopic AI
@@ -314,29 +314,32 @@ class AI:
     """
     def even_better_move(self, depth_limit, moves=[]):
         depth_limit -= 1
-        if depth_limit == 0:
-            return moves
+        if depth_limit == 0:            # Hit depth limit without hitting the wall
+            return moves                # Returing route
         else:
             layer = self.field.buffer[self.player_coords['x'] + len(moves)]
             player_y = self.player_coords['y']
             for y_move in moves:
                 player_y += y_move
-            if layer[player_y] == 1:
-                return moves
+            if layer[player_y] == 1:    # Hit a wall with this route
+                return None            # Returning None
             possible_moves = self.filter_moves(layer, player_y)
 
             paths = []
             for move in possible_moves:
-                paths.append(self.even_better_move(depth_limit, moves + [move]))
+                returned_path = self.even_better_move(depth_limit, moves + [move])
+                if returned_path is not None:       # Path did not hit the wall
+                    paths.append(returned_path)     # Adding path to list of possible paths
 
-            best_path = max(paths, key=lambda x: self.evaluate_path(x))
-
-            return best_path
+            if len(paths) > 0:
+                return max(paths, key=lambda x: self.evaluate_path(x))  # Selecting the best path using evaluation-function
+            else:
+                return None        # Found no paths that would not hit the wall
 
 def run_game():
     try:
-        move_cost = random.randint(-50, 0)
-        layer_reward = random.randint(0, 50)
+        move_cost = -16
+        layer_reward = 34
         game = Game(move_weight={-1: move_cost, 0: 0, 1: move_cost}, next_layer_weight=layer_reward, speed=0)
         game.start()
     except GameOver:
