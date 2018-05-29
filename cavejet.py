@@ -9,6 +9,11 @@ RGB_ENABLED = False
 STUDY_LOOP = False
 LOOP = False
 
+TUNNEL_GAP_MIN = 1
+TUNNEL_GAP_MAX = 4
+TUNNEL_GAP_DIFF_MAX = 1
+TUNNEL_MOVE_DIFF_MAX = 1
+
 if SCREEN_TYPE == "UNICORN":
     import unicornhat as unicorn
     unicorn.set_layout(unicorn.AUTO)
@@ -53,16 +58,23 @@ class Field:
     creates the next column for the tunnel
 
     Requires two random integers;
-        gap_place: in range of +-1, determines where the gap is placed in relation to the last gap
-        gap_width: in range of 2-5, determines the gap width
+        diff_place: in range of +-1, determines where the gap is placed in relation to the last gap
+        diff_width: in range of +-1, determines the gap width in relation to the last gap width
     """
     def tunnel_gen(self):
-        diff_place = -99
-        while (self.gap_buffer[-1][0] + diff_place < 0) or (self.gap_buffer[-1][0] + diff_place > 4):
-            diff_place = random.randint(-1, 1)
-        diff_width = random.randint(-1, 1)
-        if diff_width + self.gap_buffer[-1][1] <= 1: diff_width = 1
-        if diff_width + self.gap_buffer[-1][1] > screen_size[0]: diff_width = -1
+        if self.gap_buffer[-1][0] == 0:                             # Is the current place at screen edge?
+            diff_place += random.randint(0, TUNNEL_MOVE_DIFF_MAX)   # Go away or stay at screen edge
+        elif self.gap_buffer[-1][0] == SCREEN_HEIGHT - 1:           # Is the current place at screen edge?
+            diff_place += random.randint(-TUNNEL_MOVE_DIFF_MAX, 0)  # Go away or stay at screen edge
+        else:
+            diff_place += random.randint(-TUNNEL_MOVE_DIFF_MAX, TUNNEL_MOVE_DIFF_MAX)  # Not at screen edge, can move freely
+
+        if diff_width == TUNNEL_GAP_MIN:                            # Is gap at minimum?
+            diff_width += random.randint(0, TUNNEL_GAP_DIFF_MAX)    # Go larger or stay at same
+        if diff_width == TUNNEL_GAP_MAX:                            # Is gap at maximum?
+            diff_width += random.randint(-TUNNEL_GAP_DIFF_MAX, 0)   # Go smaller or stay at same
+        else:
+            diff_width += random.randint(-TUNNEL_GAP_DIFF_MAX, TUNNEL_GAP_DIFF_MAX)   # Adjust freely
 
         self.gap_buffer.append((self.gap_buffer[-1][0] + diff_place, self.gap_buffer[-1][1] + diff_width))
         if len(self.gap_buffer) > SCREEN_WIDTH: self.gap_buffer.pop(0)
