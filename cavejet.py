@@ -120,8 +120,8 @@ class Game:
 
     def step(self):
         self.distance += 1
-        self.field.update()
         self.ai.move()
+        self.field.update()
         if self.field.buffer[self.ai.player.x][self.ai.player.y] == 1:
             if SCREEN_TYPE == "UNICORN": self.game_over_unicorn()
             if SCREEN_TYPE == "SCROLL" or SCREEN_TYPE == "SCROLLHD": self.game_over_scroll()
