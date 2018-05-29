@@ -334,7 +334,10 @@ class AI:
             for move in possible_moves:
                 returned_path = self.even_better_move(depth_limit, moves + [move])
                 if returned_path is not None:       # Path did not hit the wall
-                    paths.append(returned_path)     # Adding path to list of possible paths
+                    if type(returned_path[0]) != list:  # Check if we got list of paths or just one path
+                        paths.append(returned_path)     # Adding path to list of possible paths
+                    else:
+                        paths += returned_path          # Return is already list of paths, summing it to the path list
 
             if len(paths) > 0:
                 return paths
