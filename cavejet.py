@@ -347,6 +347,7 @@ class AI:
                 for y_move in moves:
                     player_y += y_move
                 if layer[player_y] == 1:    # Hit a wall with this route
+                    print("layer:", layer)
                     print("This path", moves, "hits the wall, returning None")
                     return None            # Returning None
             possible_moves = self.filter_moves(layer, player_y)
