@@ -14,8 +14,8 @@ TUNNEL_GAP_MAX = 4
 TUNNEL_GAP_DIFF_MAX = 1
 TUNNEL_MOVE_DIFF_MAX = 1
 
-AI_VISIBILITY_DEPTH = 5
-AI_REROUTE_DEPTH = 5
+AI_VISIBILITY_DEPTH = 6
+AI_REROUTE_DEPTH = 2
 
 if SCREEN_TYPE == "UNICORN":
     import unicornhat as unicorn
@@ -338,6 +338,7 @@ class AI:
     def even_better_move(self, depth_limit, moves=[]):
         depth_limit -= 1
         if depth_limit == 0:            # Hit depth limit without hitting the wall
+            """
             print(" " * self.player_coords['x'] + ''.join(str(move) for move in moves))
             for y in range(SCREEN_HEIGHT):
                 row = ""
@@ -349,6 +350,7 @@ class AI:
                     else:
                         row += " "
                 print(row)
+            """
             return moves                # Returing route
         else:
             next_layer = self.field.buffer[self.player_coords['x'] + len(moves)]
