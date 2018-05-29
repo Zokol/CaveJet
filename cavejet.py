@@ -339,18 +339,32 @@ class AI:
     def even_better_move(self, depth_limit, moves=[]):
         depth_limit -= 1
         if depth_limit == 0:            # Hit depth limit without hitting the wall
+            print("Found route", moves)
+            for y in range(SCREEN_HEIGHT):
+                row = ""
+                for x, layer in enumerate(self.field.buffer):
+                    if x == self.player.x and y == self.player.y:
+                        row += "X"
+                    if layer[y] == 1:
+                        row += "*"
+                    else:
+                        row += " "
             return moves                # Returing route
         else:
-            layer = self.field.buffer[self.player_coords['x'] + len(moves) -1]
+            current_layer = self.field.buffer[self.player_coords['x'] + len(moves) - 1]
+            next_layer = self.field.buffer[self.player_coords['x'] + len(moves)]
             player_y = self.player_coords['y']
+            
             if len(moves) > 0:
                 for y_move in moves:
                     player_y += y_move
-                if layer[player_y] == 1:    # Hit a wall with this route
-                    print("layer:", layer)
+            
+                if current_layer[player_y] == 1:    # Hit a wall with this route
+                    print("layer:", current_layer)
                     print("This path", moves, "hits the wall, returning None")
                     return None            # Returning None
-            possible_moves = self.filter_moves(layer, player_y)
+            
+            possible_moves = self.filter_moves(next_layer, player_y)
 
             paths = []
             for move in possible_moves:
