@@ -14,8 +14,8 @@ TUNNEL_GAP_MAX = 3
 TUNNEL_GAP_DIFF_MAX = 1
 TUNNEL_MOVE_DIFF_MAX = 1
 
-AI_VISIBILITY_DEPTH = 10
-AI_REROUTE_DEPTH = 2
+AI_VISIBILITY_DEPTH = 5
+AI_REROUTE_DEPTH = 5
 
 if SCREEN_TYPE == "UNICORN":
     import unicornhat as unicorn
@@ -103,7 +103,7 @@ class Player:
 
 
 class Game:
-    def __init__(self, move_weight={-1: -1, 0: 0, 1: -1}, next_layer_weight=3, speed=0.1):
+    def __init__(self, move_weight={-1: -1, 0: 0, 1: -1}, next_layer_weight=3, speed=0):
         self.distance = 0
         self.field = Field(screen_size)
         self.ai = AI(self.field, move_weight, next_layer_weight)
