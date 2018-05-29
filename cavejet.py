@@ -15,7 +15,7 @@ TUNNEL_GAP_DIFF_MAX = 1
 TUNNEL_MOVE_DIFF_MAX = 1
 
 AI_VISIBILITY_DEPTH = 4
-AI_REROUTE_DEPTH = 4
+AI_REROUTE_DEPTH = 1
 
 if SCREEN_TYPE == "UNICORN":
     import unicornhat as unicorn
@@ -103,7 +103,7 @@ class Player:
 
 
 class Game:
-    def __init__(self, move_weight={-1: -1, 0: 0, 1: -1}, next_layer_weight=3, speed=0.05):
+    def __init__(self, move_weight={-1: -1, 0: 0, 1: -1}, next_layer_weight=3, speed=None):
         self.distance = 0
         self.field = Field(screen_size)
         self.ai = AI(self.field, move_weight, next_layer_weight)
@@ -120,6 +120,11 @@ class Game:
 
     def step(self):
         self.distance += 1
+        if self.speed is None:
+            start = time.time()
+            self.ai.move()
+            self.speed = time.time() - start
+        else
         self.ai.move()
         self.field.update()
         if self.field.buffer[self.ai.player.x][self.ai.player.y] == 1:
@@ -389,7 +394,7 @@ def run_game():
         #layer_reward = 34
         move_cost = -1
         layer_reward = 10
-        game = Game(move_weight={-1: move_cost, 0: 0, 1: move_cost}, next_layer_weight=layer_reward, speed=0)
+        game = Game(move_weight={-1: move_cost, 0: 0, 1: move_cost}, next_layer_weight=layer_reward)
         game.start()
     except GameOver:
         print({"score": game.distance, "move_cost": move_cost, "layer_reward": layer_reward})
