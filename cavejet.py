@@ -68,7 +68,7 @@ class Field:
     def tunnel_gen(self):
         if self.gap_buffer[-1][0] == 0:                             # Is the current place at screen edge?
             diff_place = random.randint(0, TUNNEL_MOVE_DIFF_MAX)   # Go away or stay at screen edge
-        elif self.gap_buffer[-1][0] == SCREEN_HEIGHT - 1:           # Is the current place at screen edge?
+        elif self.gap_buffer[-1][0] == SCREEN_HEIGHT - TUNNEL_MOVE_DIFF_MAX:           # Is the current place at screen edge?
             diff_place = random.randint(-TUNNEL_MOVE_DIFF_MAX, 0)  # Go away or stay at screen edge
         else:
             diff_place = random.randint(-TUNNEL_MOVE_DIFF_MAX, TUNNEL_MOVE_DIFF_MAX)  # Not at screen edge, can move freely
