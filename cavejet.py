@@ -124,8 +124,8 @@ class Game:
             start = time.time()
             self.ai.move()
             self.speed = time.time() - start
-        else
-        self.ai.move()
+        else:
+            self.ai.move()
         self.field.update()
         if self.field.buffer[self.ai.player.x][self.ai.player.y] == 1:
             if SCREEN_TYPE == "UNICORN": self.game_over_unicorn()
