@@ -15,7 +15,7 @@ TUNNEL_GAP_DIFF_MAX = 1
 TUNNEL_MOVE_DIFF_MAX = 1
 
 AI_VISIBILITY_DEPTH = 5
-AI_REROUTE_DEPTH = 2
+AI_REROUTE_DEPTH = 5
 
 if SCREEN_TYPE == "UNICORN":
     import unicornhat as unicorn
@@ -214,6 +214,10 @@ class AI:
             if layer[player_y + 1] == 1:
                 try: possible_moves.remove(1)
                 except ValueError: pass
+        if len(possible_moves) == 0:
+            print("No possible moves to next layer!!")
+        if len(possible_moves) == 1:
+            print("Only one possible move")
         return possible_moves
 
     """
