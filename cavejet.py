@@ -71,7 +71,7 @@ class Field:
 
         if self.gap_buffer[-1][1] == TUNNEL_GAP_MIN:                            # Is gap at minimum?
             diff_width = random.randint(0, TUNNEL_GAP_DIFF_MAX)    # Go larger or stay at same
-        if self.gap_buffer[-1][1] == TUNNEL_GAP_MAX:                            # Is gap at maximum?
+        elif self.gap_buffer[-1][1] == TUNNEL_GAP_MAX:                            # Is gap at maximum?
             diff_width = random.randint(-TUNNEL_GAP_DIFF_MAX, 0)   # Go smaller or stay at same
         else:
             diff_width = random.randint(-TUNNEL_GAP_DIFF_MAX, TUNNEL_GAP_DIFF_MAX)   # Adjust freely
